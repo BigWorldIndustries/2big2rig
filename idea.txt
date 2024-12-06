@@ -1,0 +1,44 @@
+-handling factions (dividing the number into a random N different quantities)
+	-each faction should have different ratios of votes, but the total is still respected
+	-each faction could have different rates of increase
+
+-the organic incrementing needs to eventually converge on the real data
+
+
+axiom:
+-the numbers should only ever go up
+	-on number receive, take the max of (current number, new number) to enforce this
+
+-the given numbers should represent the RATIO to reach when all is said and done
+	-i.e. if the ratio is 3:1 then the final votes should be exactly 3:1, within
+
+
+
+
+
+
+
+goals:
+	-whoever is winning the real vote should be winning the sim vote (or be on a gradient toward taking the lead due to higher rate of votes)
+
+	-when that condition is satisfied ^ the algorithm can begin randomizing rates with a limiting function to prevent the margin from deviating too far from the real margin 
+	(i.e. if BigDaddy is winning 3:1, then the votes can deviate from 4:1 and 2:1, but never 1:1 or 5:1)
+	(i.e. if Tony is winning 3:2, then the votes can deviate from 2:2 to 4:2, but never 1:2 or 5:2)
+
+	-fake lead flips maybe can be allowed if the percents are very close
+	
+
+step 1: smoothstepping toward real ratio
+
+	- app receives 3 numbers a, b, c
+	- app takes the max vs current numbers to prevent a reduction in count (should never happen, but it's protected if it does)
+	- sum total is calculated and percentages are calculated for each (i.e. 30%, 10%, 60%)
+	- app applies a rate factor for each, i.e. 3x, 1x, 6x
+	- each name increments by the rate factor i.e. +3 votes, +1 votes, +6 votes
+	- the total ratio is periodically checked & rates are adjusted if needed (maybe there's nothing to do here, math dictates that it will eventually converge on the true ratio)
+
+step 2: randomizing: eh maybe not necessary
+
+
+TODO:
+-due to random distributions, the ratio for categories is mostly matching the overal ratio over time, when the goal should be some categories being skewed to different ratios than the total
