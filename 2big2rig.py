@@ -2,11 +2,15 @@ from flask import Flask, request, jsonify
 import threading
 import time
 import random
+from bigworld_election_2024 import seed_rates, categories
 
 app = Flask(__name__)
 
-# Use a dictionary to store named numbers, each containing three category values
-stored_numbers = {}
+# Initialize stored_numbers using the initial_rates and categories
+stored_numbers = {
+    key: {'rate': rate, 'values': {category: 0.0 for category in categories}} 
+    for key, rate in seed_rates.items()
+}
 
 def increment_numbers():
     while True:
@@ -24,7 +28,7 @@ def increment_numbers():
                 scaled_sub_rates = sorted([sub_rate * total_rate for sub_rate in sub_rates]) 
                 
                 # Increment each category by its sub-rate
-                for i, category in enumerate(['alpha', 'beta', 'theta']):
+                for i, category in enumerate(categories):
                     stored_numbers[key]['values'][category] += scaled_sub_rates[i]
 
 @app.route('/numbers', methods=['GET'])
@@ -52,7 +56,7 @@ def set_number():
                     stored_numbers[key]['rate'] = rate
                 else:
                     # Initialize the number with values set to 0.0 for each category
-                    stored_numbers[key] = {'rate': rate, 'values': {'alpha': 0.0, 'beta': 0.0, 'theta': 0.0}}
+                    stored_numbers[key] = {'rate': rate, 'values': {category: 0.0 for category in categories}}
             else:
                 return jsonify({'success': False, 'error': 'Invalid input type for rate'}), 400
         # Return the current status including each category's value and the total

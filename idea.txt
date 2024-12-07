@@ -42,3 +42,11 @@ step 2: randomizing: eh maybe not necessary
 
 TODO:
 -due to random distributions, the ratio for categories is mostly matching the overal ratio over time, when the goal should be some categories being skewed to different ratios than the total
+	-solution:
+		-calculate the subrates with 2 weightings:
+			1 based on the size of the category (as it is now)
+			1 based on the bias of a certain category for a certain candidate (to be implemented)
+			average these two to get the final rate for that particular candidate in that particular category
+
+rename 'category' to 'faction' or 'region'
+rename some other variables for clarity
