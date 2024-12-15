@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import random
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -23,7 +24,10 @@ def fetch_latest_data():
 
 def store_new_numbers(numbers):
     try:
-        db.collection('elections').document(ELECTION_ID).update({'simvotes': numbers})
+        db.collection('elections').document(ELECTION_ID).update({
+            'simvotes': numbers,
+            'sim_timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        })
     except Exception as e:
         print(f"Failed to store data: {e}")
 
