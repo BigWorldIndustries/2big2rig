@@ -38,8 +38,8 @@ def reset_numbers():
         return
     
     for candidate in data['simvotes']:
-        for faction in data['simvotes'][candidate]:
-            data['simvotes'][candidate][faction] = 0.0
+        for region in data['simvotes'][candidate]:
+            data['simvotes'][candidate][region] = 0.0
     
     try:
         db.collection('elections').document(ELECTION_ID).update({
@@ -50,9 +50,9 @@ def reset_numbers():
         print(f"Failed to reset simvotes: {e}")
 
 
-def calculate_sub_rates(total_rate, factions):
-    parts = sorted([0] + [random.random() for _ in range(len(factions) - 1)] + [1])
-    sub_rates = [parts[i + 1] - parts[i] for i in range(len(factions))]
+def calculate_sub_rates(total_rate, regions):
+    parts = sorted([0] + [random.random() for _ in range(len(regions) - 1)] + [1])
+    sub_rates = [parts[i + 1] - parts[i] for i in range(len(regions))]
     return sorted([sub_rate * total_rate for sub_rate in sub_rates])
 
 def increment_numbers():
@@ -61,24 +61,24 @@ def increment_numbers():
         print("No data available.")
         return
 
-    factions = data['factions']  # ordered smallest to largest
-    factions_by_bias = data['factions_by_bias'] # ordered for each candidate least favorability to most
+    regions = data['regions']  # ordered smallest to largest
+    regions_by_bias = data['regions_by_bias'] # ordered for each candidate least favorability to most
     numbers = data['simvotes']
 
     for candidate, votes in data['votes'].items():
         # a random jitter is applied to prevent candidates on equal votes having exactly identical simvotes
         total_rate = (RATE_SCALE * votes) + (RATE_SCALE*random.random())
-        sub_rates1 = calculate_sub_rates(total_rate, factions)
-        sub_rates2 = calculate_sub_rates(total_rate, factions)
+        sub_rates1 = calculate_sub_rates(total_rate, regions)
+        sub_rates2 = calculate_sub_rates(total_rate, regions)
 
         # population bias
-        for i, faction in enumerate(factions):
-            numbers[candidate][faction] += sub_rates1[i] / 2
+        for i, region in enumerate(regions):
+            numbers[candidate][region] += sub_rates1[i] / 2
         # favorability bias
-        for i, faction in enumerate(factions_by_bias[candidate]):
-            numbers[candidate][faction] += sub_rates2[i] / 2
+        for i, region in enumerate(regions_by_bias[candidate]):
+            numbers[candidate][region] += sub_rates2[i] / 2
 
-        total_sum = sum(numbers[candidate][faction] for faction in factions)
+        total_sum = sum(numbers[candidate][region] for region in regions)
         numbers[candidate]['total'] = int(round(total_sum))
 
     store_new_numbers(numbers)
