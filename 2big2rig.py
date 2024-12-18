@@ -22,14 +22,70 @@ def fetch_latest_data():
         print(f"Failed to fetch data: {e}")
         return None
 
-def store_new_numbers(numbers):
+def store_new_numbers(numbers, percents, conicStops):
     try:
         db.collection('elections').document(ELECTION_ID).update({
             'simvotes': numbers,
+            'sim_percents': percents,
+            'sim_conics': conicStops,
             'sim_timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         })
     except Exception as e:
         print(f"Failed to store data: {e}")
+
+def calculate_percents(numbers, regions):
+    # Extract the list of candidates from numbers
+    candidates = list(numbers.keys())
+
+    # Initialize the percents data structure
+    percents = {region: {candidate: 0.0 for candidate in candidates} for region in regions}
+
+    # Calculate the percentages
+    for region in regions:
+        # Calculate the total votes in this region across all candidates
+        total_votes = sum(numbers[candidate][region] for candidate in candidates)
+        if total_votes > 0:  # Avoid division by zero
+            for candidate in candidates:
+                percents[region][candidate] = (
+                    round(100 * numbers[candidate][region] / total_votes)
+                )
+        else:
+            for candidate in candidates:
+                percents[region][candidate] = 0.0
+    return percents
+
+def convert_to_conic_stops(percents):
+    conic_stops = {}
+    colors = {
+        "BigDaddy": "#005fb3",
+        "Tony": "#b84d00",
+        "TheNightPatrol": "#00a4d1"
+    }
+
+    for region, candidates in percents.items():
+        region_conic_stops = []
+        start = 0
+
+        for candidate, percent in candidates.items():
+            if candidate in colors:
+                color = colors[candidate]
+            else:
+                color = 'gray'  # Default color if not specified
+
+            end = start + percent
+            region_conic_stops.append({
+                'label': candidate,
+                'color': color,
+                'start': start,
+                'end': end
+            })
+            start = end
+
+        conic_stops[region] = region_conic_stops
+
+    #print("Conic Stops:", conic_stops)  # Optional debugging output
+    return conic_stops
+
 
 def reset_numbers():
     data = fetch_latest_data()
@@ -81,7 +137,9 @@ def increment_numbers():
         total_sum = sum(numbers[candidate][region] for region in regions)
         numbers[candidate]['total'] = int(round(total_sum))
 
-    store_new_numbers(numbers)
+    percents = calculate_percents(numbers, regions)
+    conicStops = convert_to_conic_stops(percents)
+    store_new_numbers(numbers, percents, conicStops)
 
 if __name__ == '__main__':
     if RESET_VOTES:
