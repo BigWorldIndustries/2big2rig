@@ -121,7 +121,9 @@ def increment_numbers():
     regions_by_bias = data['regions_by_bias'] # ordered for each candidate least favorability to most
     numbers = data['simvotes']
 
-    for candidate, votes in data['votes'].items():
+    # data['simrates'] is a field that tracks votes but can be manually edited for tweaks to the sim
+    # use data['votes'] to use real votes as the guide
+    for candidate, votes in data['simrates'].items():
         # a random jitter is applied to prevent candidates on equal votes having exactly identical simvotes
         total_rate = (RATE_SCALE * votes) + (RATE_SCALE*random.random())
         sub_rates1 = calculate_sub_rates(total_rate, regions)
