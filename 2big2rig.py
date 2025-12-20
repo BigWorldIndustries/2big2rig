@@ -11,7 +11,7 @@ db = firestore.client()
 
 RESET_VOTES = False
 INTERVAL = 60  # increment interval in seconds
-ELECTION_ID = 'r9nizviywIETk3k0t5t2'  # Document ID on Firestore
+ELECTION_ID = 'ZAJPieAZCgcXUfE1dpPm'  # Document ID on Firestore
 RATE_SCALE = 100 # how much to scale the rate by
 
 def fetch_latest_data():
@@ -57,8 +57,8 @@ def calculate_percents(numbers, regions):
 def convert_to_conic_stops(percents):
     conic_stops = {}
     colors = {
-        "BigDaddy": "#005fb3",
-        "Tony": "#b84d00",
+        "Ally/Dan": "#005fb3",
+        "Johan": "#b84d00",
         "TheNightPatrol": "#00a4d1"
     }
 
