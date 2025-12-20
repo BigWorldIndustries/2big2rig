@@ -57,8 +57,8 @@ def calculate_percents(numbers, regions):
 def convert_to_conic_stops(percents):
     conic_stops = {}
     colors = {
-        "Ally/Dan": "#005fb3",
-        "Johan": "#b84d00",
+        "Ally/Dan": "#00b349",
+        "Johan": "#ff8a8a",
         "TheNightPatrol": "#00a4d1"
     }
 
