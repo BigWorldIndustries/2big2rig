@@ -4,7 +4,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 # Initialize Firebase
-cred = credentials.Certificate('bigworld-e4cf4-firebase-adminsdk-g6v6y-8cf756ec6c.json')
+cred = credentials.Certificate('bigworld-e4cf4-firebase-adminsdk-g6v6y-44c3b3f9b6.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -143,6 +143,7 @@ dan_bias = [
 ]
 
 johan_bias = [
+    "Even Newer Jersey",
     "Danny's Fishing Village",
     "Smuggler's Pass",
     "The Canadian Department",
@@ -196,7 +197,6 @@ johan_bias = [
     "The Tip",
     "Araluen",
     "Shroomwood Forest",
-    "Even Newer Jersey",
     "BigDaddy's Beachfront Property",
     "Roruna",
     "Prifddinas",

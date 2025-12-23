@@ -5,7 +5,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 # Initialize Firebase
-cred = credentials.Certificate('bigworld-e4cf4-firebase-adminsdk-g6v6y-8cf756ec6c.json')
+cred = credentials.Certificate('bigworld-e4cf4-firebase-adminsdk-g6v6y-44c3b3f9b6.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
@@ -58,7 +58,7 @@ def convert_to_conic_stops(percents):
     conic_stops = {}
     colors = {
         "Ally/Dan": "#00b349",
-        "Johan": "#ff8a8a",
+        "Johan": "#fd4b4b",
         "TheNightPatrol": "#00a4d1"
     }
 
